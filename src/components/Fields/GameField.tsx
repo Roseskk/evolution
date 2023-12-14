@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import styled from 'styled-components';
-import io from 'socket.io-client';
+import socket from "../../api/ws/socket.ts";
 
 const Field = styled.div`
   display: flex;
@@ -21,7 +21,6 @@ interface GameFieldProps {
 }
 
 const GameField: React.FC<GameFieldProps> = (props) => {
-    const socket = io('http://192.168.1.69:3000');
     socket.emit('joinGame','1')
     useEffect(() => {
         socket.on('gameJoined', (gameData) => {
