@@ -11,7 +11,7 @@ const MainMenu: React.FC = (props) => {
             <h1>Main Menu</h1>
             <button onClick={() => {
                 navigate("/game/1")
-                socket.emit('createGame','1')
+                socket.emit('createGame',{gameId: '1'})
 
             }}>Test game create</button>
             <button onClick={() => {

@@ -1,6 +1,9 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useId, useState} from 'react';
 import styled from 'styled-components';
 import socket from "../../api/ws/socket.ts";
+import {Container} from "../../styles/container.ts";
+import Deck from "../cards/deck.tsx";
+import {IGame} from "../../types/gameType.ts";
 
 const Field = styled.div`
   display: flex;
@@ -21,9 +24,15 @@ interface GameFieldProps {
 }
 
 const GameField: React.FC<GameFieldProps> = (props) => {
-    socket.emit('joinGame','1')
+
+    const playerId = useId()
+    const gameId = '1'
+
+    const [game, setGame] = useState<IGame | null>(null)
     useEffect(() => {
+        socket.emit('joinGame', {gameId, playerId})
         socket.on('gameJoined', (gameData) => {
+            setGame(gameData?.game)
             console.log(gameData)
         });
 
@@ -36,12 +45,19 @@ const GameField: React.FC<GameFieldProps> = (props) => {
             socket.off('gameJoinError');
         };
     }, []);
-
+    // console.log(game)
 
     return (
-        <Field>
-            <p>Игровое поле</p>
-        </Field>
+        <Container>
+            <Field>
+                <p>Игровое поле</p>
+                {
+                    !!game
+                    ? <Deck cards={game!.deck} />
+                    : null
+                }
+            </Field>
+        </Container>
     );
 };
 
