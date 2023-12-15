@@ -33,14 +33,13 @@ const GameField: React.FC<GameFieldProps> = (props) => {
 
     useEffect(() => {
         if (connect) {
-            console.log(socket)
             socket.on('joinSuccess', (data) => {
                 // Обработка данных о присоединении к игре
                 // console.log('Присоединились к игре:', data);
                 socket.emit('joinGame',{gameId: gameId, playerId: socket.id})
 
-                socket.on('gameJoined',(game) => {
-                    console.log(game)
+                socket.on('gameJoined',(dta) => {
+                    setGame(dta.game)
                 })
             });
 
@@ -73,10 +72,16 @@ const GameField: React.FC<GameFieldProps> = (props) => {
 
     return (
         <Container>
-            <button onClick={() => {
-                socket.emit('lobbyReady',{gameId, playerId: socket.id})
-                setConnect(true)
-            }}>ГОТОВ</button>
+            {
+                connect
+                ? !!game
+                    ? null
+                    : <span>Ожидание игроков</span>
+                :  <button onClick={() => {
+                        socket.emit('lobbyReady',{gameId, playerId: socket.id})
+                        setConnect(true)
+                    }}>ГОТОВ</button>
+            }
             <Field>
                 <p>Игровое поле</p>
                 {
