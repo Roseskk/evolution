@@ -16,3 +16,14 @@ export interface IPlayer {
     id: string,
     hand: number[]
 }
+
+
+export interface Board {
+    playerId: string
+    cards: Card[]
+}
+
+export interface Card {
+    card: number
+    food: number
+}

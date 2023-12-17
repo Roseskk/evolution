@@ -1,6 +1,6 @@
 import React from 'react';
 import {IPlayer} from "../../types/gameType.ts";
-import Card from "../cards/card.tsx";
+import Cards from "../cards/cards.tsx";
 
 export interface IPlayerProps {
     players: IPlayer[]
@@ -15,7 +15,7 @@ const Players: React.FC<IPlayerProps> = ({players}) => {
                 players.map(player => (
                     <li>
                         <span>{player.id}</span>
-                        <Card hand={player.hand} />
+                        <Cards hand={player.hand} />
                     </li>
                 ))
             }

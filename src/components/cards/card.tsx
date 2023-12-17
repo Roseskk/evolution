@@ -1,43 +1,35 @@
 import React from 'react';
 import styled from 'styled-components';
-
-export interface IPropsHand {
-    hand: number[]
-}
-
-export const CardsWrapper = styled.ul`
-    margin: 0;
-  padding: 0;
-  display: flex;
-  gap: 2px;
-  
-  list-style: none;
-`
+import { useDrag } from 'react-dnd';
 
 export const CardWrapper = styled.li`
   min-width: 100px;
   min-height: 150px;
-  
+
   background-color: wheat;
   border-radius: 5px;
   border: 1px solid black;
-  
+
   display: flex;
   align-items: center;
   justify-content: center;
+  
+  cursor: pointer;
 `
 
-const Card: React.FC<IPropsHand> = ({hand}) => {
+const Card = ({card}: {card: number}) => {
+    console.log(card)
+    const [{ isDragging }, drag] = useDrag(() => ({
+        type: 'card',
+        item: { card },
+        collect: monitor => ({
+            isDragging: !!monitor.isDragging(),
+        }),
+    }));
     return (
-        <CardsWrapper>
-            {
-                hand.map(card => (
-                    <CardWrapper>
-                        <span>{card}</span>
-                    </CardWrapper>
-                ))
-            }
-        </CardsWrapper>
+        <CardWrapper ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }}>
+            <span>{card}</span>
+        </CardWrapper>
     );
 };
 

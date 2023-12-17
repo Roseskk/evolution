@@ -1,90 +1,93 @@
-import React, {useEffect, useId, useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import socket from "../../api/ws/socket.ts";
-import {Container} from "../../styles/container.ts";
+import Cards from "../cards/cards.tsx";
 import Deck from "../cards/deck.tsx";
-import {IGame, IPlayer} from "../../types/gameType.ts";
-import Card from "../cards/card.tsx";
+import {Board, IGame, IPlayer} from "../../types/gameType.ts";
+import {Container} from "../../styles/container.ts";
+import { useDrop } from 'react-dnd';
 
 const Field = styled.div`
+  // Ваши стили для Field
   position: relative;
-  
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: saddlebrown; // примерный цвет фона
+  background-color: saddlebrown;
   border: 1px solid #ccc;
   padding: 20px;
   margin: 20px;
   border-radius: 10px;
-  width: 80%; // Примерная ширина поля
-  height: 600px; // Примерная высота поля
-  
-  p {
-    color: white;
-    font-size: 20px;
-    text-transform: uppercase;
-    letter-spacing: 4px;
-  }
+  width: 80%;
+  height: 600px;
 `;
 
-interface GameFieldProps {
 
-}
 
-const GameField: React.FC<GameFieldProps> = (props) => {
-    const [currentPlayerTurn, setCurrentPlayerTurn] = useState<number | null>(null)
-    const [hand, setHand] = useState<number[] | null>(null)
+const GameField: React.FC = () => {
+    const [currentPlayerTurn, setCurrentPlayerTurn] = useState<string | null>(null);
+    const [hand, setHand] = useState<number[] | null>(null);
+    const [deck, setDeck] = useState(null);
+    const [players, setPlayers] = useState<IPlayer[] | null>(null);
+    const [board, setBoard] = useState<Board[] | null>(null)
 
-    const playerId = localStorage.getItem('name')
-
-    const [deck, setDeck] = useState(null)
-    const [players, setPlayers] = useState<IPlayer[] | null>(null)
+    const playerId = localStorage.getItem('name') || '';
 
     useEffect(() => {
-        socket.emit('gameStatus')
-
-        socket.on('checkStatus',(data) => {
-            console.log(data)
-            setDeck(data.game.deck)
-            setPlayers(data.game.players)
-
-            setCurrentPlayerTurn(data.game.players[data.currenPlayerIndex].id)
+        socket.emit('gameStatus');
+        socket.on('checkStatus', (data) => {
+            console.log(data);
+            setDeck(data.game.deck);
+            setPlayers(data.game.players);
+            setCurrentPlayerTurn(data.game.players[data.game.currentPlayerIndex].id);
+        });
+        socket.on('gameStateUpdate', (updatedGameStatus) => {
+            console.log(updatedGameStatus)
+            setPlayers(updatedGameStatus.players);
         })
 
         return () => {
-            socket.off('checkStatus')
-        }
+            socket.off('checkStatus');
+            socket.off('gameStateUpdate');
+        };
     }, []);
 
     useEffect(() => {
-        if (!!players) {
-            const currentPlayerHand = players.find((p: { id: string | null; }) => p.id === localStorage.getItem('name'))?.hand;
-
+        if (players) {
+            console.log('players',players)
+            const currentPlayerHand = players.find(p => p.id === playerId)?.hand;
             if (currentPlayerHand) {
+                console.log('cur hand', currentPlayerHand)
                 setHand(currentPlayerHand);
             }
         }
     }, [players]);
 
-    console.log(hand)
+    const [, drop] = useDrop(() => ({
+        accept: 'card',
+        drop: (item, monitor) => {
+            // логика обработки события бросания
+            const didDrop = monitor.didDrop();
+            if (didDrop) {
+                return;
+            }
+
+            // дропаем карточку тут
+            socket.emit('playerAction',{playerId:socket.id ,cardId: item?.card, takeFood: false, endTurn: false })
+
+            console.log('Dropped item', item);
+        },
+    }));
+
 
     return (
         <Container>
-            <Field>
+            <Field ref={drop}>
                 <p>Игровое поле</p>
-                {
-                    !!deck
-                    ? <Deck cards={deck} />
-                    : null
-                }
+                {deck && <Deck cards={deck} />}
             </Field>
-            {
-                !!hand
-                ? <Card hand={hand} />
-                : null
-            }
+            {hand && <Cards hand={hand} />}
         </Container>
     );
 };
