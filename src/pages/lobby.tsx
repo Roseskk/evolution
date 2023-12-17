@@ -67,6 +67,7 @@ const Lobby = () => {
             if (args.host === args.joinedPlayerId) {
                 setLobbyHost(true)
             }
+            localStorage.setItem('name',args.joinedPlayerId)
             setReadyUsers(args.players)
         })
 
@@ -75,7 +76,7 @@ const Lobby = () => {
         })
 
         socket.on('gameStarted', (game) => {
-            console.log(game)
+            navigate(`game`)
         })
 
         socket.on('startGameError', (err) => {
@@ -85,14 +86,12 @@ const Lobby = () => {
         return () => {
             socket.off('playerJoined')
             socket.off('lobbyError')
-            socket.off('gameStarted')
             socket.off('startGameError')
         }
     }, []);
 
     const handleStartLobby = () => {
         socket.emit('startGameFromLobby',{lobbyId: localStorage.getItem('lobby')})
-        // navigate(`game`)
     }
 
     return (

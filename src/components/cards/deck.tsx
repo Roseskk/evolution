@@ -13,7 +13,7 @@ export const DeckCard = styled.div`
   align-items: center;
   justify-content: center;
   
-  background: black;
+  background: green;
   color: wheat;
   
   span {
@@ -22,7 +22,7 @@ export const DeckCard = styled.div`
 `
 
 
-const Deck = ({cards}: {cards: {id: number, name: string}[]}) => {
+const Deck = ({cards}: {cards: []}) => {
     return (
         <div>
             <DeckCard>
