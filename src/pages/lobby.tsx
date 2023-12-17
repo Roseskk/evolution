@@ -63,11 +63,11 @@ const Lobby = () => {
 
     useLayoutEffect(() => {
         socket.emit('joinLobby',{lobbyId: localStorage.getItem('lobby')})
+        localStorage.setItem('name',socket.id)
         socket.on('playerJoined', (args) => {
             if (args.host === args.joinedPlayerId) {
                 setLobbyHost(true)
             }
-            localStorage.setItem('name',args.joinedPlayerId)
             setReadyUsers(args.players)
         })
 

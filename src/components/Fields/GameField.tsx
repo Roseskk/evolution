@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import socket from "../../api/ws/socket.ts";
 import {Container} from "../../styles/container.ts";
 import Deck from "../cards/deck.tsx";
-import {IGame} from "../../types/gameType.ts";
+import {IGame, IPlayer} from "../../types/gameType.ts";
 import Card from "../cards/card.tsx";
 
 const Field = styled.div`
@@ -40,19 +40,15 @@ const GameField: React.FC<GameFieldProps> = (props) => {
     const playerId = localStorage.getItem('name')
 
     const [deck, setDeck] = useState(null)
-    const [game, setGame] = useState<IGame | null>(null)
+    const [players, setPlayers] = useState<IPlayer[] | null>(null)
+
     useEffect(() => {
         socket.emit('gameStatus')
 
         socket.on('checkStatus',(data) => {
             console.log(data)
             setDeck(data.game.deck)
-
-            const currentPlayerHand = data.game.players.find((p: { id: string | null; }) => p.id === localStorage.getItem('name'))?.hand;
-
-            if (currentPlayerHand) {
-                setHand(currentPlayerHand);
-            }
+            setPlayers(data.game.players)
 
             setCurrentPlayerTurn(data.game.players[data.currenPlayerIndex].id)
         })
@@ -61,6 +57,16 @@ const GameField: React.FC<GameFieldProps> = (props) => {
             socket.off('checkStatus')
         }
     }, []);
+
+    useEffect(() => {
+        if (!!players) {
+            const currentPlayerHand = players.find((p: { id: string | null; }) => p.id === localStorage.getItem('name'))?.hand;
+
+            if (currentPlayerHand) {
+                setHand(currentPlayerHand);
+            }
+        }
+    }, [players]);
 
     console.log(hand)
 
