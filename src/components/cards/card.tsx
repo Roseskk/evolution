@@ -18,7 +18,6 @@ export const CardWrapper = styled.li`
 `
 
 const Card = ({card}: {card: number}) => {
-    console.log(card)
     const [{ isDragging }, drag] = useDrag(() => ({
         type: 'card',
         item: { card },

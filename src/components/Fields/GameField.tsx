@@ -6,6 +6,7 @@ import Deck from "../cards/deck.tsx";
 import {Board, IGame, IPlayer} from "../../types/gameType.ts";
 import {Container} from "../../styles/container.ts";
 import { useDrop } from 'react-dnd';
+import BoardLayout from "../cards/board/boardLayout.tsx";
 
 const Field = styled.div`
   // Ваши стили для Field
@@ -37,7 +38,7 @@ const GameField: React.FC = () => {
     useEffect(() => {
         socket.emit('gameStatus');
         socket.on('checkStatus', (data) => {
-            console.log(data);
+            console.log(data)
             setDeck(data.game.deck);
             setPlayers(data.game.players);
             setCurrentPlayerTurn(data.game.players[data.game.currentPlayerIndex].id);
@@ -45,6 +46,7 @@ const GameField: React.FC = () => {
         socket.on('gameStateUpdate', (updatedGameStatus) => {
             console.log(updatedGameStatus)
             setPlayers(updatedGameStatus.players);
+            setBoard(updatedGameStatus.board)
         })
 
         return () => {
@@ -55,10 +57,8 @@ const GameField: React.FC = () => {
 
     useEffect(() => {
         if (players) {
-            console.log('players',players)
             const currentPlayerHand = players.find(p => p.id === playerId)?.hand;
             if (currentPlayerHand) {
-                console.log('cur hand', currentPlayerHand)
                 setHand(currentPlayerHand);
             }
         }
@@ -86,6 +86,7 @@ const GameField: React.FC = () => {
             <Field ref={drop}>
                 <p>Игровое поле</p>
                 {deck && <Deck cards={deck} />}
+                {board && <BoardLayout board={board}  currentPlayerId={playerId}/>}
             </Field>
             {hand && <Cards hand={hand} />}
         </Container>

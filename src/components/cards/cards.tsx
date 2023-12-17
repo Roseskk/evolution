@@ -25,7 +25,6 @@ export const CardWrapper = styled.li`
 `
 
 const Cards: React.FC<IPropsHand> = ({ hand }) => {
-    console.log('hand rerender',hand)
     return (
         <CardsWrapper>
             {hand.map((card, index) => {
