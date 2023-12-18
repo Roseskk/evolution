@@ -3,11 +3,12 @@ import styled from 'styled-components';
 import {Card} from "../../../types/gameType.ts";
 import {useDrop} from "react-dnd";
 import socket from "../../../api/ws/socket.ts";
+import BoardPropertyCards from "./properties/boardPropertyCards.tsx";
 
 // Стили для карточек
 const CardWrapper = styled.div`
-  width: 75px;
-  height: 150px;
+  width: 50px;
+  height: 75px;
   background-color: green;
   color: white;
   font-size: 15px;
@@ -19,7 +20,7 @@ const CardWrapper = styled.div`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 `;
 
-const BoardCard = ({card}: {card: Card}) => {
+const BoardCard = ({card, position}: {card: Card, position: string}) => {
     const [, drop] = useDrop({
         accept: 'card',
         drop: (item, monitor) => {
@@ -42,7 +43,11 @@ const BoardCard = ({card}: {card: Card}) => {
     return (
         <CardWrapper ref={drop}>
             {card.card}
-            {/*Card: {card.card}, Food: {card.food}*/}
+            {
+                card.properties.length > 0
+                ? <BoardPropertyCards position={position} properties={card.properties} />
+                : null
+            }
         </CardWrapper>
     );
 };

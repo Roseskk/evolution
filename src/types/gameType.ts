@@ -26,4 +26,5 @@ export interface Board {
 export interface Card {
     card: number
     food: number
+    properties: number[]
 }

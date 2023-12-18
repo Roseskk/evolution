@@ -12,7 +12,7 @@ const StyledPlayerBoardWrapper = styled.div`
 `;
 
 const BoardLayout = ({ board, currentPlayerId }: { board: Board[], currentPlayerId: string }) => {
-    const getPosition = (playerId, index) => {
+    const getPosition = (playerId) => {
         if (playerId === currentPlayerId) return "bottom";
 
         const otherPlayers = board.filter(b => b.playerId !== currentPlayerId);
@@ -30,8 +30,8 @@ const BoardLayout = ({ board, currentPlayerId }: { board: Board[], currentPlayer
     return (
         <>
             {board.map((b, index) => (
-                <StyledPlayerBoardWrapper key={index} className={getPosition(b.playerId, index)}>
-                    <PlayerBoard board={b} />
+                <StyledPlayerBoardWrapper key={index} className={getPosition(b.playerId)}>
+                    <PlayerBoard position={getPosition(b.playerId)} board={b} />
                 </StyledPlayerBoardWrapper>
             ))}
         </>

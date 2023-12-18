@@ -18,11 +18,11 @@ const CardWrapper = styled.div`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 `;
 
-const PlayerBoard = ({ board }: { board: Board }) => {
+const PlayerBoard = ({ board, position }: { board: Board, position: string }) => {
     return (
         <div style={{display: "flex"}}>
             {board.cards.map((card, index) => (
-                <BoardCard key={card.card} card={card} />
+                <BoardCard position={position} key={card.card} card={card} />
             ))}
         </div>
     );
