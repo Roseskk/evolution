@@ -22,7 +22,7 @@ const Card = ({card}: {card: number}) => {
         type: 'card',
         item: { card },
         collect: monitor => ({
-            isDragging: !!monitor.isDragging(),
+            isDragging: monitor.isDragging(),
         }),
     }));
     return (

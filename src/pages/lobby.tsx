@@ -63,17 +63,28 @@ const Lobby = () => {
     const [readyUsers, setReadyUsers] = useState<string[] | null>(null)
     const [error, setError] = useState('')
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         socket.emit('joinLobby',{lobbyId: localStorage.getItem('lobby')})
         localStorage.setItem('name',socket.id)
-        socket.on('playerJoined', (args) => {
+        socket.on('updatePlayers', (args) => {
+            // console.log(args,'args from updatePlayer')
             if (args.host === args.joinedPlayerId) {
                 setLobbyHost(true)
             }
             setReadyUsers(args.players)
         })
 
+        socket.on('playerJoined', (args) => {
+            // console.log(args,'args from PLAYERJOINED')
+            if (args.host === args.joinedPlayerId) {
+                setLobbyHost(true)
+            }
+            setReadyUsers(args.players)
+        })
+
+
         socket.on('lobbyError', (err) => {
+            console.log(err)
             setError(err)
         })
 
