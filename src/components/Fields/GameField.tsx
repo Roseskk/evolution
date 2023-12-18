@@ -7,6 +7,10 @@ import {Board, IGame, IPlayer} from "../../types/gameType.ts";
 import {Container} from "../../styles/container.ts";
 import { useDrop } from 'react-dnd';
 import BoardLayout from "../cards/board/boardLayout.tsx";
+import {PlayerTurn} from "../../styles/papers.ts";
+import PlayerTurnInfo from "../players/playerTurnInfo.tsx";
+import {PassButton} from "../../styles/buttons.ts";
+import Button from "../buttons/button.tsx";
 
 const Field = styled.div`
   // Ваши стили для Field
@@ -27,6 +31,7 @@ const Field = styled.div`
 
 
 const GameField: React.FC = () => {
+    const [currentPlayerIndex, setCurrentPlayerIndex] = useState<number | null>(null)
     const [currentPlayerTurn, setCurrentPlayerTurn] = useState<string | null>(null);
     const [hand, setHand] = useState<number[] | null>(null);
     const [deck, setDeck] = useState(null);
@@ -38,15 +43,16 @@ const GameField: React.FC = () => {
     useEffect(() => {
         socket.emit('gameStatus');
         socket.on('checkStatus', (data) => {
-            console.log(data)
             setDeck(data.game.deck);
             setPlayers(data.game.players);
             setCurrentPlayerTurn(data.game.players[data.game.currentPlayerIndex].id);
+            setCurrentPlayerIndex(data.game.currentPlayerIndex)
         });
         socket.on('gameStateUpdate', (updatedGameStatus) => {
-            console.log(updatedGameStatus)
             setPlayers(updatedGameStatus.players);
             setBoard(updatedGameStatus.board)
+            setCurrentPlayerTurn(updatedGameStatus.players[updatedGameStatus.currentPlayerIndex].id);
+            setCurrentPlayerIndex(updatedGameStatus.currentPlayerIndex)
         })
 
         return () => {
@@ -74,7 +80,7 @@ const GameField: React.FC = () => {
             }
 
             // дропаем карточку тут
-            socket.emit('playerAction',{playerId:socket.id ,cardId: item?.card, takeFood: false, endTurn: false })
+            socket.emit('playerAction',{playerId:socket.id ,cardId: item?.card, pass: false })
 
             console.log('Dropped item', item);
         },
@@ -83,6 +89,14 @@ const GameField: React.FC = () => {
 
     return (
         <Container>
+            {
+                !!players
+                ? <PlayerTurnInfo currentPlayerIndex={currentPlayerIndex!} currentPlayer={currentPlayerTurn!} playerId={playerId}/>
+                : null
+            }
+            {
+                <Button action={'pass'} playerId={playerId} />
+            }
             <Field ref={drop}>
                 <p>Игровое поле</p>
                 {deck && <Deck cards={deck} />}

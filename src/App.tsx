@@ -7,6 +7,11 @@ import Lobby from "./pages/lobby.tsx";
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
+//Toastify
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
+
+
 // const socket = io('172.16.1.66:3000');
 
 function App() {
@@ -14,6 +19,7 @@ function App() {
   return (
       // Test Routing
       <DndProvider backend={HTML5Backend}>
+          <ToastContainer />
           <BrowserRouter>
               <Routes>
                   <Route path={'/'} element={<MainMenu />} />

@@ -6,6 +6,8 @@ import {Subtitle} from "../styles/text.ts";
 import styled from 'styled-components';
 import {DefaultButton} from "../styles/buttons.ts";
 import {useNavigate} from "react-router-dom";
+import {toast} from "react-toastify";
+
 
 export const Wrapper = styled.div`
   display: flex;
@@ -81,6 +83,10 @@ const Lobby = () => {
 
         socket.on('startGameError', (err) => {
             console.log(err)
+            toast.error(err.error, {
+                autoClose: 2000,
+                closeOnClick: true
+            })
         })
 
         return () => {
