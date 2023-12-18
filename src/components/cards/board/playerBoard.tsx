@@ -1,6 +1,7 @@
 import React from 'react';
 import { Board } from "../../../types/gameType.ts";
 import styled from 'styled-components';
+import BoardCard from "./boardCard.tsx";
 
 // Стили для карточек
 const CardWrapper = styled.div`
@@ -21,9 +22,7 @@ const PlayerBoard = ({ board }: { board: Board }) => {
     return (
         <div style={{display: "flex"}}>
             {board.cards.map((card, index) => (
-                <CardWrapper key={index}>
-                    Card: {card.card}, Food: {card.food}
-                </CardWrapper>
+                <BoardCard key={card.card} card={card} />
             ))}
         </div>
     );
