@@ -20,7 +20,7 @@ const CardWrapper = styled.div`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 `;
 
-const BoardCard = ({card, position}: {card: Card, position: string}) => {
+const BoardCard = ({card, position, playerId}: {card: Card, position: string, playerId: string}) => {
     const [, drop] = useDrop({
         accept: 'card',
         drop: (item, monitor) => {
@@ -29,8 +29,10 @@ const BoardCard = ({card, position}: {card: Card, position: string}) => {
                 return;
             }
 
+
             // Обработка действия бросания карточки
             // console.log('Dropped card:', item, 'on card:', card);
+
             socket.emit('playerAction',
                 {
                     lobbyId: localStorage.getItem('lobby'),
@@ -42,7 +44,7 @@ const BoardCard = ({card, position}: {card: Card, position: string}) => {
     });
     return (
         <CardWrapper ref={drop}>
-            {card.card}
+            <span className={`${playerId === localStorage.getItem('name')! ? playerId : ''}`} >{card.card}</span>
             {
                 card.properties.length > 0
                 ? <BoardPropertyCards position={position} properties={card.properties} />

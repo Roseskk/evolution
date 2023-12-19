@@ -9,6 +9,7 @@ import { useDrop } from 'react-dnd';
 import BoardLayout from "../cards/board/boardLayout.tsx";
 import PlayerTurnInfo from "../players/playerTurnInfo.tsx";
 import Button from "../buttons/button.tsx";
+import {findInsertBeforeCard} from "../../utils/cards.ts";
 
 const Field = styled.div`
   // Ваши стили для Field
@@ -34,7 +35,7 @@ const GameField: React.FC = () => {
     const [hand, setHand] = useState<number[] | null>(null);
     const [deck, setDeck] = useState(null);
     const [players, setPlayers] = useState<IPlayer[] | null>(null);
-    const [board, setBoard] = useState<Board[] | null>(null)
+    const [board, setBoard] = useState<Board[] | []>([])
 
     const playerId = localStorage.getItem('name') || '';
 
@@ -79,12 +80,38 @@ const GameField: React.FC = () => {
                 return;
             }
 
-            // дропаем карточку тут
-            socket.emit('playerAction',{lobbyId: localStorage.getItem('lobby'),playerId:socket.id ,cardId: item?.card!, pass: false })
+            const clientOffset = monitor.getClientOffset()
 
-            console.log('Dropped item', item);
+            if (!clientOffset)return;
+
+            const arrayOfBoard = document.querySelectorAll(`.${playerId}`)
+            if (arrayOfBoard.length > 0) {
+                const clientOffset = monitor.getClientOffset();
+
+                const cardsInfo = Array.from(arrayOfBoard).map(card => {
+                    const rect = card.getBoundingClientRect();
+                    return {
+                        element: card.textContent,
+                        x: rect.left + window.scrollX, // Координата X элемента
+                        y: rect.top + window.scrollY, // Координата Y элемента
+                    };
+                });
+                const cardInsertBefore = findInsertBeforeCard(clientOffset,cardsInfo)
+                console.log(cardInsertBefore)
+                 if (!!cardInsertBefore) {
+                     console.log('S')
+                     socket.emit('playerAction',{lobbyId: localStorage.getItem('lobby'),playerId:socket.id ,cardId: item?.card!, prevToCard: Number(cardInsertBefore), pass: false })
+                 } else {
+                     socket.emit('playerAction',{lobbyId: localStorage.getItem('lobby'),playerId:socket.id ,cardId: item?.card!, pass: false })
+                 }
+
+            } else {
+                socket.emit('playerAction',{lobbyId: localStorage.getItem('lobby'),playerId:socket.id ,cardId: item?.card!, pass: false })
+            }
         },
     }));
+
+
 
 
     return (

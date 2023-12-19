@@ -17,12 +17,12 @@ const CardWrapper = styled.div`
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 `;
-
+// id={localStorage.getItem('name')!}
 const PlayerBoard = ({ board, position }: { board: Board, position: string }) => {
     return (
-        <div style={{display: "flex"}}>
+        <div style={{display: "flex", gap: '75px'}}>
             {board.cards.map((card, index) => (
-                <BoardCard position={position} key={card.card} card={card} />
+                <BoardCard playerId={board.playerId} position={position} key={card.card} card={card} />
             ))}
         </div>
     );

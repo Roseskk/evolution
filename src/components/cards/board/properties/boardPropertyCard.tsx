@@ -8,6 +8,8 @@ const StyledBoardPropertyCard = styled.div`
   left: 50%;
   border-radius: 5px;
   border: 1px solid black;
+  color: black;
+  text-align: center;
 `;
 
 const BoardPropertyCard = ({ property, position, idx }: { property: number, position: string, idx: number }) => {

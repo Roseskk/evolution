@@ -2,9 +2,15 @@ import React from 'react';
 import { Board } from "../../../types/gameType.ts";
 import PlayerBoard from "./playerBoard.tsx";
 import styled from 'styled-components';
+import {useDrop} from "react-dnd";
+import socket from "../../../api/ws/socket.ts";
 
 const StyledPlayerBoardWrapper = styled.div`
   position: absolute;
+  background: rgba(173, 211, 181, .34);
+  width: 100%;
+  display: flex;
+  justify-content: center;
   &.top { top: 0; left: 50%; transform: translateX(-50%); }
   &.bottom { bottom: 0; left: 50%; transform: translateX(-50%); }
   &.left { left: 0; top: 50%; transform: translateY(-50%); }
@@ -26,6 +32,7 @@ const BoardLayout = ({ board, currentPlayerId }: { board: Board[], currentPlayer
             default: return "undefined";
         }
     };
+
 
     return (
         <>

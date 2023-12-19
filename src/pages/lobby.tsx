@@ -131,8 +131,8 @@ const Lobby = () => {
                             <ul>
                                 {
                                     !!readyUsers
-                                        ? readyUsers.map(user => (
-                                            <li>
+                                        ? readyUsers.map((user, index) => (
+                                            <li key={index}>
                                                 <span>{user.slice(0,5)}...</span>
                                                 <span className={'circle'}></span>
                                             </li>
