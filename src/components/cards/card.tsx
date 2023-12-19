@@ -20,7 +20,7 @@ export const CardWrapper = styled.li`
 const Card = ({card}: {card: number}) => {
     const [{ isDragging }, drag] = useDrag(() => ({
         type: 'card',
-        item: { card },
+        item: {type: 'card', card:card},
         collect: monitor => ({
             isDragging: monitor.isDragging(),
         }),

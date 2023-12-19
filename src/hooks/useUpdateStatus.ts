@@ -10,6 +10,7 @@ const useUpdateStatus = (setters: any) => {
             setters.setBoard(data.board)
             setters.setCurrentPlayerTurn(data.players[data.currentPlayerIndex].id);
             setters.setCurrentPlayerIndex(data.currentPlayerIndex)
+            // setters.setFood(data.food)
         }
 
         socket.on('gameStateUpdate', handleUpdateData)

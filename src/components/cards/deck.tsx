@@ -2,8 +2,8 @@ import React from 'react';
 import styled from "styled-components";
 
 export const DeckCard = styled.div`
-  width: 100px;
-  height: 150px;
+  width: 50px;
+  height: 75px;
   border: 1px solid black;
   border-radius: 12px;
   
@@ -24,9 +24,9 @@ export const DeckCard = styled.div`
 
 const Deck = ({cards}: {cards: []}) => {
     return (
-        <div>
+        <div style={{display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center'}}>
+            <span style={{color: 'wheat', fontWeight: 'bold', fontSize: '18px', textTransform: 'uppercase'}}>Колода</span>
             <DeckCard>
-                <span>Количество</span>
                 <span>{cards.length}</span>
             </DeckCard>
         </div>

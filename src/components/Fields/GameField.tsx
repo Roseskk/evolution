@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 import socket from "../../api/ws/socket.ts";
 import Cards from "../cards/cards.tsx";
@@ -14,6 +14,7 @@ import useWsEmit from "../../hooks/useWsEmit.ts";
 import useCheckStatus from "../../hooks/useCheckStatus.ts";
 import useUpdateStatus from "../../hooks/useUpdateStatus.ts";
 import usePlayerHand from "../../hooks/usePlayerHand.ts";
+import FoodList from "../food/foodList.tsx";
 
 const Field = styled.div`
   // Ваши стили для Field
@@ -40,12 +41,37 @@ const GameField: React.FC = () => {
     const [deck, setDeck] = useState(null);
     const [players, setPlayers] = useState<IPlayer[] | null>(null);
     const [board, setBoard] = useState<Board[] | []>([])
+    const [food, setFood] = useState(0)
 
     const playerId = localStorage.getItem('name') || '';
 
-    useWsEmit({action: 'gameStatus', args: {lobbyId: localStorage.getItem('lobby')}})
-    useCheckStatus({setDeck, setPlayers, setCurrentPlayerIndex, setCurrentPlayerTurn})
-    useUpdateStatus({setPlayers, setBoard, setCurrentPlayerTurn, setCurrentPlayerIndex})
+    // useWsEmit({action: 'gameStatus', args: {lobbyId: localStorage.getItem('lobby')}})
+    // useCheckStatus({setDeck, setPlayers, setCurrentPlayerIndex, setCurrentPlayerTurn, setFood})
+    // useUpdateStatus({setPlayers, setBoard, setCurrentPlayerTurn, setCurrentPlayerIndex, setFood})
+    useEffect(() => {
+        socket.emit('gameStatus', {lobbyId: localStorage.getItem('lobby')});
+        socket.on('checkStatus', (data) => {
+            console.log(data)
+            setDeck(data.game.deck);
+            setPlayers(data.game.players);
+            setCurrentPlayerTurn(data.game.players[data.game.currentPlayerIndex].id);
+            setCurrentPlayerIndex(data.game.currentPlayerIndex)
+            setFood(food)
+        });
+        socket.on('gameStateUpdate', (updatedGameStatus) => {
+            console.log(updatedGameStatus)
+            setPlayers(updatedGameStatus.players);
+            setBoard(updatedGameStatus.board)
+            setCurrentPlayerTurn(updatedGameStatus.players[updatedGameStatus.currentPlayerIndex].id);
+            setCurrentPlayerIndex(updatedGameStatus.currentPlayerIndex)
+            setFood(updatedGameStatus.food)
+        })
+
+        return () => {
+            socket.off('checkStatus');
+            socket.off('gameStateUpdate');
+        };
+    }, []);
     usePlayerHand(players, setHand)
 
     const [, drop] = useDrop(() => ({
@@ -87,8 +113,6 @@ const GameField: React.FC = () => {
     }));
 
 
-
-
     return (
         <Container>
             {
@@ -100,8 +124,8 @@ const GameField: React.FC = () => {
                 <Button lobbyId={localStorage.getItem('lobby')!} action={'pass'} playerId={playerId} />
             }
             <Field ref={drop}>
-                <p>Игровое поле</p>
                 {deck && <Deck cards={deck} />}
+                {!!food && <FoodList food={food} />}
                 {board && <BoardLayout board={board}  currentPlayerId={playerId}/>}
             </Field>
             {hand && <Cards hand={hand} />}

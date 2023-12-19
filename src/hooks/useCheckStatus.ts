@@ -9,6 +9,7 @@ const useCheckStatus = (setters: any) => {
             setters.setPlayers(data.game.players);
             setters.setCurrentPlayerTurn(data.game.players[data.game.currentPlayerIndex].id);
             setters.setCurrentPlayerIndex(data.game.currentPlayerIndex);
+            // setters.setFood(data.game.food)
         };
 
         socket.on('checkStatus', handleCheckStatus);

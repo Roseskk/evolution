@@ -23,24 +23,26 @@ const CardWrapper = styled.div`
 
 const BoardCard = ({card, position, playerId}: {card: Card, position: string, playerId: string}) => {
     const [, drop] = useDrop({
-        accept: 'card',
+        accept: ['card', 'food'], // Принимаем элементы типа 'card' и 'food'
         drop: (item, monitor) => {
             const didDrop = monitor.didDrop();
-            if (didDrop) {
-                return;
-            }
+            if (didDrop) return;
 
-
-            // Обработка действия бросания карточки
-            // console.log('Dropped card:', item, 'on card:', card);
-
-            socket.emit('playerAction',
-                {
+            // Определение типа элемента и выполнение соответствующего действия
+            if (item.type === 'card') {
+                console.log(item)
+                // Логика обработки для карточек
+                socket.emit('playerAction', {
                     lobbyId: localStorage.getItem('lobby'),
                     playerId: localStorage.getItem('name'),
                     cardId: card.card, pass: false,
-                    propertyCardId: item.card }
-            )
+                    propertyCardId: item.card
+                });
+            } else if (item.type === 'food') {
+                console.log('еда')
+                // Логика обработки для еды
+                // Пример: socket.emit('playerAction', { /* ... */ });
+            }
         }
     });
     return (
