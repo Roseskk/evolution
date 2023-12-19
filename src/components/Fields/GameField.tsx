@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import socket from "../../api/ws/socket.ts";
 import Cards from "../cards/cards.tsx";
@@ -47,14 +47,6 @@ const GameField: React.FC = () => {
     useCheckStatus({setDeck, setPlayers, setCurrentPlayerIndex, setCurrentPlayerTurn})
     useUpdateStatus({setPlayers, setBoard, setCurrentPlayerTurn, setCurrentPlayerIndex})
     usePlayerHand(players, setHand)
-    useEffect(() => {
-        if (players) {
-            const currentPlayerHand = players.find(p => p.id === playerId)?.hand;
-            if (currentPlayerHand) {
-                setHand(currentPlayerHand);
-            }
-        }
-    }, [players]);
 
     const [, drop] = useDrop(() => ({
         accept: 'card',
@@ -77,8 +69,8 @@ const GameField: React.FC = () => {
                     const rect = card.getBoundingClientRect();
                     return {
                         element: card.textContent,
-                        x: rect.left + window.scrollX, // Координата X элемента
-                        y: rect.top + window.scrollY, // Координата Y элемента
+                        x: rect.left + window.scrollX,
+                        y: rect.top + window.scrollY,
                     };
                 });
                 const cardInsertBefore = findInsertBeforeCard(clientOffset,cardsInfo)

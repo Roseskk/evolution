@@ -1,8 +1,11 @@
 
 export interface IGame {
-    id: string,
     deck: ICard[]
-    players: []
+    players: IPlayer[]
+    food: number,
+    phase: number,
+    currentPlayerIndex: number,
+    board: Board[]
 }
 
 export interface ICard {
@@ -12,7 +15,6 @@ export interface ICard {
 
 
 export interface IPlayer {
-    food: number,
     id: string,
     hand: number[]
 }
