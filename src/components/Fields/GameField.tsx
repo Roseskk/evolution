@@ -10,6 +10,10 @@ import BoardLayout from "../cards/board/boardLayout.tsx";
 import PlayerTurnInfo from "../players/playerTurnInfo.tsx";
 import Button from "../buttons/button.tsx";
 import {findInsertBeforeCard} from "../../utils/cards.ts";
+import useWsEmit from "../../hooks/useWsEmit.ts";
+import useCheckStatus from "../../hooks/useCheckStatus.ts";
+import useUpdateStatus from "../../hooks/useUpdateStatus.ts";
+import usePlayerHand from "../../hooks/usePlayerHand.ts";
 
 const Field = styled.div`
   // Ваши стили для Field
@@ -39,29 +43,10 @@ const GameField: React.FC = () => {
 
     const playerId = localStorage.getItem('name') || '';
 
-    useEffect(() => {
-        socket.emit('gameStatus', {lobbyId: localStorage.getItem('lobby')});
-        socket.on('checkStatus', (data) => {
-            console.log(data)
-            setDeck(data.game.deck);
-            setPlayers(data.game.players);
-            setCurrentPlayerTurn(data.game.players[data.game.currentPlayerIndex].id);
-            setCurrentPlayerIndex(data.game.currentPlayerIndex)
-        });
-        socket.on('gameStateUpdate', (updatedGameStatus) => {
-            console.log(updatedGameStatus)
-            setPlayers(updatedGameStatus.players);
-            setBoard(updatedGameStatus.board)
-            setCurrentPlayerTurn(updatedGameStatus.players[updatedGameStatus.currentPlayerIndex].id);
-            setCurrentPlayerIndex(updatedGameStatus.currentPlayerIndex)
-        })
-
-        return () => {
-            socket.off('checkStatus');
-            socket.off('gameStateUpdate');
-        };
-    }, []);
-
+    useWsEmit({action: 'gameStatus', args: {lobbyId: localStorage.getItem('lobby')}})
+    useCheckStatus({setDeck, setPlayers, setCurrentPlayerIndex, setCurrentPlayerTurn})
+    useUpdateStatus({setPlayers, setBoard, setCurrentPlayerTurn, setCurrentPlayerIndex})
+    usePlayerHand(players, setHand)
     useEffect(() => {
         if (players) {
             const currentPlayerHand = players.find(p => p.id === playerId)?.hand;
@@ -73,7 +58,7 @@ const GameField: React.FC = () => {
 
     const [, drop] = useDrop(() => ({
         accept: 'card',
-        drop: (item, monitor) => {
+        drop: (item: {card: any}, monitor) => {
             // логика обработки события бросания
             const didDrop = monitor.didDrop();
             if (didDrop) {
@@ -97,9 +82,7 @@ const GameField: React.FC = () => {
                     };
                 });
                 const cardInsertBefore = findInsertBeforeCard(clientOffset,cardsInfo)
-                console.log(cardInsertBefore)
                  if (!!cardInsertBefore) {
-                     console.log('S')
                      socket.emit('playerAction',{lobbyId: localStorage.getItem('lobby'),playerId:socket.id ,cardId: item?.card!, prevToCard: Number(cardInsertBefore), pass: false })
                  } else {
                      socket.emit('playerAction',{lobbyId: localStorage.getItem('lobby'),playerId:socket.id ,cardId: item?.card!, pass: false })
