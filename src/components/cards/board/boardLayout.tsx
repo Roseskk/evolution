@@ -2,20 +2,18 @@ import React from 'react';
 import { Board } from "../../../types/gameType.ts";
 import PlayerBoard from "./playerBoard.tsx";
 import styled from 'styled-components';
-import {useDrop} from "react-dnd";
-import socket from "../../../api/ws/socket.ts";
 
 const StyledPlayerBoardWrapper = styled.div`
   position: absolute;
   background: rgba(173, 211, 181, .34);
-  overflow-x: scroll;
-  width: 75%;
+  //overflow-x: scroll;
+  width: 100vw;
   display: flex;
   justify-content: center;
   &.top {
     top: 0;
     left: 50%;
-    transform: translateX(-50%); 
+    transform: translateX(-50%);
     
   }
   &.bottom { bottom: 0; left: 50%; transform: translateX(-50%); }
@@ -69,6 +67,22 @@ const StyledArrows = styled.div`
   }
 `;
 
+// export const WrapperContainer = styled.div`
+//   width: 100%;
+//   padding: 0 20px;
+//   overflow-x: scroll ;
+//   height: 30%;
+//   //background-color: red;
+//   position: absolute;
+//   &.top {
+//     top: 0;
+//     left: 50%;
+//     transform: translateX(-50%);
+//
+//   }
+//   &.bottom { bottom: 0; left: 50%; transform: translateX(-50%); }
+// `
+
 
 const BoardLayout = ({ board, currentPlayerId }: { board: Board[], currentPlayerId: string }) => {
     const getPosition = (playerId) => {
@@ -91,7 +105,7 @@ const BoardLayout = ({ board, currentPlayerId }: { board: Board[], currentPlayer
         <>
             {board.map((b, index) => (
                 <>
-                    <StyledArrows key={index}  className={getPosition(b.playerId)}></StyledArrows>
+                    {/*<StyledArrows key={index}  className={getPosition(b.playerId)}></StyledArrows>*/}
                     <StyledPlayerBoardWrapper className={getPosition(b.playerId)}>
                         <PlayerBoard position={getPosition(b.playerId)} board={b} />
                     </StyledPlayerBoardWrapper>

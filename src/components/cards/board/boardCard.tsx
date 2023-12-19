@@ -18,6 +18,7 @@ const CardWrapper = styled.div`
   margin: 5px;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  overflow: visible;
 `;
 
 const BoardCard = ({card, position, playerId}: {card: Card, position: string, playerId: string}) => {

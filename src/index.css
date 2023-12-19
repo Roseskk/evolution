@@ -9,3 +9,7 @@ body {
 
   background: cadetblue;
 }
+
+::-webkit-scrollbar {
+  width: 0;
+}

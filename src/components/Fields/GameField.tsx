@@ -24,7 +24,7 @@ const Field = styled.div`
   justify-content: center;
   background-color: saddlebrown;
   border: 1px solid #ccc;
-  padding: 20px;
+  padding: 0 20px;
   margin: 20px;
   border-radius: 10px;
   width: 80%;
