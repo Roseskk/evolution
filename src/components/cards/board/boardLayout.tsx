@@ -104,12 +104,10 @@ const BoardLayout = ({ board, currentPlayerId }: { board: Board[], currentPlayer
     return (
         <>
             {board.map((b, index) => (
-                <>
-                    {/*<StyledArrows key={index}  className={getPosition(b.playerId)}></StyledArrows>*/}
-                    <StyledPlayerBoardWrapper className={getPosition(b.playerId)}>
+                    // <StyledArrows key={index}  className={getPosition(b.playerId)}></StyledArrows>
+                    <StyledPlayerBoardWrapper key={index} className={getPosition(b.playerId)}>
                         <PlayerBoard position={getPosition(b.playerId)} board={b} />
                     </StyledPlayerBoardWrapper>
-                </>
             ))}
         </>
     );

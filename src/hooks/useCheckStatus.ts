@@ -1,9 +1,10 @@
 import {useEffect} from 'react';
 import socket from "../api/ws/socket.ts";
+import {IGame} from "../types/gameType.ts";
 
 const useCheckStatus = (setters: any) => {
     useEffect(() => {
-        const handleCheckStatus = (data) => {
+        const handleCheckStatus = (data: {game: IGame}) => {
             setters.setDeck(data.game.deck);
             setters.setPlayers(data.game.players);
             setters.setCurrentPlayerTurn(data.game.players[data.game.currentPlayerIndex].id);

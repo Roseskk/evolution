@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import {Card} from "../../../types/gameType.ts";
+import {Card, ICard} from "../../../types/gameType.ts";
 import {useDrop} from "react-dnd";
 import socket from "../../../api/ws/socket.ts";
 import BoardPropertyCards from "./properties/boardPropertyCards.tsx";
