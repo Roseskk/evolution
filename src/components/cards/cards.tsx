@@ -2,9 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import Card from "./card.tsx";
 import {CardsWrapper} from "../../styles/cards.ts";
+import {ICard} from "../../types/gameType.ts";
 
 export interface IPropsHand {
-    hand: number[]
+    hand: ICard[]
 }
 
 
@@ -29,7 +30,7 @@ const Cards: React.FC<IPropsHand> = ({ hand }) => {
         <CardsWrapper>
             {hand.map((card) => {
                 return (
-                    <Card card={card} key={card} />
+                    <Card card={card} key={card.id} />
                 );
             })}
         </CardsWrapper>

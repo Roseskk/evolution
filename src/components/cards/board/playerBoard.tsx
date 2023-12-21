@@ -23,7 +23,7 @@ const PlayerBoard = ({ board, position }: { board: Board, position: string }) =>
     return (
         <div style={{display: "flex", gap: '25px', overflow: 'visible'}}>
             {board.cards.map((card, index) => (
-                <BoardCard playerId={board.playerId} position={position} key={card.card} card={card} />
+                <BoardCard playerId={board.playerId} position={position} key={card.id} card={card} />
             ))}
         </div>
     );

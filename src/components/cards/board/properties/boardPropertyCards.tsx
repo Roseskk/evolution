@@ -5,8 +5,8 @@ import styled from "styled-components";
 export const StyledBoardPropertyCards = styled.div`
   position: absolute;
 
-  min-width: 50px;
-  min-height: 75px;
+  min-width: 100px;
+  min-height: 120px;
 
   background-color: wheat;
   border-radius: 5px;
@@ -21,12 +21,12 @@ export const StyledBoardPropertyCards = styled.div`
 `
 
 
-const BoardPropertyCards = ({properties, position} : {properties: number[], position: string}) => {
+const BoardPropertyCards = ({properties, position} : {properties: string[], position: string}) => {
     return (
         <StyledBoardPropertyCards>
             {
                 properties.map((p, index) => (
-                    <BoardPropertyCard key={p} idx={index} position={position} property={p}/>
+                    <BoardPropertyCard key={index} idx={index} position={position} property={p}/>
                 ))
             }
         </StyledBoardPropertyCards>

@@ -10,7 +10,13 @@ export interface IGame {
 
 export interface ICard {
     id: number,
-    name: string
+    name: string,
+    description: string,
+    needFood: number,
+    needFoodAsProperty: number,
+    food: number,
+    isAnimal: boolean
+    properties: string[]
 }
 
 
@@ -22,7 +28,7 @@ export interface IPlayer {
 
 export interface Board {
     playerId: string
-    cards: Card[]
+    cards: ICard[]
 }
 
 export interface Card {

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import socket from "../../api/ws/socket.ts";
 import Cards from "../cards/cards.tsx";
 import Deck from "../cards/deck.tsx";
-import {Board, IPlayer} from "../../types/gameType.ts";
+import {Board, ICard, IPlayer} from "../../types/gameType.ts";
 import {Container} from "../../styles/container.ts";
 import { useDrop } from 'react-dnd';
 import BoardLayout from "../cards/board/boardLayout.tsx";
@@ -38,7 +38,7 @@ const Field = styled.div`
 const GameField: React.FC = () => {
     const [currentPlayerIndex, setCurrentPlayerIndex] = useState<number | null>(null)
     const [currentPlayerTurn, setCurrentPlayerTurn] = useState<string | null>(null);
-    const [hand, setHand] = useState<number[] | null>(null);
+    const [hand, setHand] = useState<ICard[] | null>(null);
     const [deck, setDeck] = useState(null);
     const [players, setPlayers] = useState<IPlayer[] | null>(null);
     const [board, setBoard] = useState<Board[] | []>([])
@@ -88,6 +88,8 @@ const GameField: React.FC = () => {
             if (didDrop) {
                 return;
             }
+
+            console.log(item.card)
 
             const clientOffset = monitor.getClientOffset()
 
