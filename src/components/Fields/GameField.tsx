@@ -15,6 +15,7 @@ import useCheckStatus from "../../hooks/useCheckStatus.ts";
 import useUpdateStatus from "../../hooks/useUpdateStatus.ts";
 import usePlayerHand from "../../hooks/usePlayerHand.ts";
 import FoodList from "../food/foodList.tsx";
+import {toast} from "react-toastify";
 
 const Field = styled.div`
   // Ваши стили для Field
@@ -56,7 +57,7 @@ const GameField: React.FC = () => {
             setPlayers(data.game.players);
             setCurrentPlayerTurn(data.game.players[data.game.currentPlayerIndex].id);
             setCurrentPlayerIndex(data.game.currentPlayerIndex)
-            setFood(food)
+            setFood(data.game.food)
         });
         socket.on('gameStateUpdate', (updatedGameStatus) => {
             console.log(updatedGameStatus)
@@ -67,9 +68,14 @@ const GameField: React.FC = () => {
             setFood(updatedGameStatus.food)
         })
 
+        socket.on('gameError', (message) => {
+            toast.error(message.message)
+        })
+
         return () => {
             socket.off('checkStatus');
             socket.off('gameStateUpdate');
+            socket.off('gameError');
         };
     }, []);
     usePlayerHand(players, setHand)
