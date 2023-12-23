@@ -20,7 +20,7 @@ const StyledBoardPropertyCard = styled.div`
   
 `;
 
-const BoardPropertyCard = ({ property, position, idx }: { property: string, position: string, idx: number }) => {
+const BoardPropertyCard = ({ property, position, idx }: { property: {id: number, name: string}, position: string, idx: number }) => {
     // Рассчитываем вертикальное смещение
     const verticalOffset = idx * 20;
     const zIndex = position === 'top' ? 1000 - idx : 1000 - idx;
@@ -36,7 +36,7 @@ const BoardPropertyCard = ({ property, position, idx }: { property: string, posi
 
     return (
         <StyledBoardPropertyCard style={cardStyle} className={position}>
-            <div style={{transform:'translateY(10px)', width: '100%', height: '100%'}}>{property}</div>
+            <div style={{transform:'translateY(10px)', width: '100%', height: '100%'}}>{property.name}</div>
         </StyledBoardPropertyCard>
     );
 };

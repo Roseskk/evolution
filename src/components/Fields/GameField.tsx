@@ -72,6 +72,10 @@ const GameField: React.FC = () => {
             toast.error(message.message)
         })
 
+        socket.on('chooseAction',(message) => {
+            console.log(message)
+        })
+
         return () => {
             socket.off('checkStatus');
             socket.off('gameStateUpdate');

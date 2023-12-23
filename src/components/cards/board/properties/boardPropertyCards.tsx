@@ -21,7 +21,7 @@ export const StyledBoardPropertyCards = styled.div`
 `
 
 
-const BoardPropertyCards = ({properties, position} : {properties: string[], position: string}) => {
+const BoardPropertyCards = ({properties, position} : {properties: Array<{id: number, name: string}>, position: string}) => {
     return (
         <StyledBoardPropertyCards>
             {
