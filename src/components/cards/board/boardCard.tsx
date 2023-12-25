@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {SetStateAction, useRef} from 'react';
 import styled from 'styled-components';
 import {Card, ICard} from "../../../types/gameType.ts";
 import {useDrag, useDrop} from "react-dnd";
@@ -33,7 +33,7 @@ const CardWrapper = styled.div`
   }
 `;
 
-const BoardCard = ({card, position, playerId}: {card: ICard, position: string, playerId: string}) => {
+const BoardCard = ({card, position, playerId, setterTrigger, actionTrigger}: {card: ICard, position: string, playerId: string,  setterTrigger: SetStateAction<any>, actionTrigger: null | any[]}) => {
     const ref = useRef(null);
 
     const [, drag] = useDrag({
@@ -112,7 +112,7 @@ const BoardCard = ({card, position, playerId}: {card: ICard, position: string, p
             }
             {
                 card.properties.length > 0
-                ? <BoardPropertyCards position={position} properties={card.properties} />
+                ? <BoardPropertyCards setterTrigger={setterTrigger} actionTrigger={actionTrigger} position={position} properties={card.properties} />
                 : null
             }
         </CardWrapper>

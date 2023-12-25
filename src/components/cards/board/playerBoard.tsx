@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {SetStateAction} from 'react';
 import { Board } from "../../../types/gameType.ts";
 import styled from 'styled-components';
 import BoardCard from "./boardCard.tsx";
@@ -19,11 +19,11 @@ const CardWrapper = styled.div`
   
 `;
 // id={localStorage.getItem('name')!}
-const PlayerBoard = ({ board, position }: { board: Board, position: string }) => {
+const PlayerBoard = ({ board, position, setterTrigger, actionTrigger }: { board: Board, position: string, setterTrigger: SetStateAction<any>, actionTrigger: null | any[] }) => {
     return (
         <div style={{display: "flex", gap: '25px', overflow: 'visible'}}>
             {board.cards.map((card, index) => (
-                <BoardCard playerId={board.playerId} position={position} key={card.id} card={card} />
+                <BoardCard setterTrigger={setterTrigger} actionTrigger={actionTrigger} playerId={board.playerId} position={position} key={card.id} card={card} />
             ))}
         </div>
     );

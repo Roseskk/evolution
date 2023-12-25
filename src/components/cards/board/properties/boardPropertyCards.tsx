@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {SetStateAction} from 'react';
 import BoardPropertyCard from "./boardPropertyCard.tsx";
 import styled from "styled-components";
 
@@ -21,12 +21,12 @@ export const StyledBoardPropertyCards = styled.div`
 `
 
 
-const BoardPropertyCards = ({properties, position} : {properties: Array<{id: number, name: string}>, position: string}) => {
+const BoardPropertyCards = ({properties, position, actionTrigger, setterTrigger} : {properties: Array<{id: number, name: string}>, position: string,  setterTrigger: SetStateAction<any>, actionTrigger: null | any[]}) => {
     return (
         <StyledBoardPropertyCards>
             {
                 properties.map((p, index) => (
-                    <BoardPropertyCard key={index} idx={index} position={position} property={p}/>
+                    <BoardPropertyCard actionTrigger={actionTrigger} setterTrigger={setterTrigger} key={index} idx={index} position={position} property={p}/>
                 ))
             }
         </StyledBoardPropertyCards>

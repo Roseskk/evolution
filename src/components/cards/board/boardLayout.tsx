@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {SetStateAction} from 'react';
 import { Board } from "../../../types/gameType.ts";
 import PlayerBoard from "./playerBoard.tsx";
 import styled from 'styled-components';
@@ -84,7 +84,7 @@ const StyledArrows = styled.div`
 // `
 
 
-const BoardLayout = ({ board, currentPlayerId }: { board: Board[], currentPlayerId: string }) => {
+const BoardLayout = ({ board, currentPlayerId, setterTrigger, actionTrigger  }: { board: Board[], currentPlayerId: string, setterTrigger: SetStateAction<any>, actionTrigger: null | any[] }) => {
     const getPosition = (playerId) => {
         if (playerId === currentPlayerId) return "bottom";
 
@@ -106,7 +106,7 @@ const BoardLayout = ({ board, currentPlayerId }: { board: Board[], currentPlayer
             {board.map((b, index) => (
                     // <StyledArrows key={index}  className={getPosition(b.playerId)}></StyledArrows>
                     <StyledPlayerBoardWrapper key={index} className={getPosition(b.playerId)}>
-                        <PlayerBoard position={getPosition(b.playerId)} board={b} />
+                        <PlayerBoard setterTrigger={setterTrigger} actionTrigger={actionTrigger} position={getPosition(b.playerId)} board={b} />
                     </StyledPlayerBoardWrapper>
             ))}
         </>

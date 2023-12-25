@@ -43,6 +43,7 @@ const GameField: React.FC = () => {
     const [players, setPlayers] = useState<IPlayer[] | null>(null);
     const [board, setBoard] = useState<Board[] | []>([])
     const [food, setFood] = useState(0)
+    const [actionTrigger, setActionTrigger] = useState(null)
 
     const playerId = localStorage.getItem('name') || '';
 
@@ -73,6 +74,7 @@ const GameField: React.FC = () => {
         })
 
         socket.on('chooseAction',(message) => {
+            setActionTrigger(message.data.options)
             console.log(message)
         })
 
@@ -80,8 +82,10 @@ const GameField: React.FC = () => {
             socket.off('checkStatus');
             socket.off('gameStateUpdate');
             socket.off('gameError');
+            socket.off('chooseAction');
         };
     }, []);
+
     usePlayerHand(players, setHand)
 
     const [, drop] = useDrop(() => ({
@@ -138,7 +142,7 @@ const GameField: React.FC = () => {
             <Field ref={drop}>
                 {deck && <Deck cards={deck} />}
                 {!!food && <FoodList food={food} />}
-                {board && <BoardLayout board={board}  currentPlayerId={playerId}/>}
+                {board && <BoardLayout setterTrigger={setActionTrigger} actionTrigger={actionTrigger} board={board}  currentPlayerId={playerId}/>}
             </Field>
             {hand && <Cards hand={hand} />}
         </Container>
