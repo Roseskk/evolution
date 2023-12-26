@@ -21,7 +21,7 @@ const StyledBoardPropertyCard = styled.div`
   
 `;
 
-const BoardPropertyCard = ({ property, position, idx, actionTrigger, setterTrigger }: { property: {id: number, name: string}, position: string, idx: number, setterTrigger: SetStateAction<any>, actionTrigger: any }) => {
+const BoardPropertyCard = ({ property, position, idx, actionTrigger, setterTrigger, cardId }: { property: {id: number, name: string}, position: string, idx: number, setterTrigger: SetStateAction<any>, actionTrigger: any, cardId: number }) => {
     // Рассчитываем вертикальное смещение
     const verticalOffset = idx * 20;
     const zIndex = position === 'top' ? 1000 - idx : 1000 - idx;
@@ -50,7 +50,10 @@ const BoardPropertyCard = ({ property, position, idx, actionTrigger, setterTrigg
     const currentStyle = isAttacked ? attackedPropertyChoice : cardStyle;
 
     const handleActionTrigger = () => {
-        socket.emit('actionResponse',{lobbyId: localStorage.getItem('lobby'),name:localStorage.getItem('name'),actionType: actionTrigger.find( p => p.propertyCardId === property.id).type, cardId: property.id})
+        if (isAttacked) {
+            socket.emit('actionResponse',{lobbyId: localStorage.getItem('lobby'),name:localStorage.getItem('name'),attackedCardId: cardId, actionType: actionTrigger.find( p => p.propertyCardId === property.id).type, cardId: property.id})
+            setterTrigger(null)
+        }
     }
 
     return (

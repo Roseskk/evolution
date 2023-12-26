@@ -21,12 +21,12 @@ export const StyledBoardPropertyCards = styled.div`
 `
 
 
-const BoardPropertyCards = ({properties, position, actionTrigger, setterTrigger} : {properties: Array<{id: number, name: string}>, position: string,  setterTrigger: SetStateAction<any>, actionTrigger: null | any[]}) => {
+const BoardPropertyCards = ({properties, position, actionTrigger, setterTrigger, cardId} : {properties: Array<{id: number, name: string}>, position: string,  setterTrigger: SetStateAction<any>, actionTrigger: null | any[], cardId: number}) => {
     return (
         <StyledBoardPropertyCards>
             {
                 properties.map((p, index) => (
-                    <BoardPropertyCard actionTrigger={actionTrigger} setterTrigger={setterTrigger} key={index} idx={index} position={position} property={p}/>
+                    <BoardPropertyCard cardId={cardId} actionTrigger={actionTrigger} setterTrigger={setterTrigger} key={index} idx={index} position={position} property={p}/>
                 ))
             }
         </StyledBoardPropertyCards>

@@ -16,6 +16,8 @@ import useUpdateStatus from "../../hooks/useUpdateStatus.ts";
 import usePlayerHand from "../../hooks/usePlayerHand.ts";
 import FoodList from "../food/foodList.tsx";
 import {toast} from "react-toastify";
+import {useActionChosenCardsContext} from "../../context/useActionChosenCards.tsx";
+import ActionCardsModal from "../modal/actionCardsModal.tsx";
 
 const Field = styled.div`
   // Ваши стили для Field
@@ -45,6 +47,9 @@ const GameField: React.FC = () => {
     const [food, setFood] = useState(0)
     const [actionTrigger, setActionTrigger] = useState(null)
 
+    //Context Hooks!
+    const {cards,setCards} = useActionChosenCardsContext()
+
     const playerId = localStorage.getItem('name') || '';
 
     // useWsEmit({action: 'gameStatus', args: {lobbyId: localStorage.getItem('lobby')}})
@@ -53,7 +58,7 @@ const GameField: React.FC = () => {
     useEffect(() => {
         socket.emit('gameStatus', {lobbyId: localStorage.getItem('lobby')});
         socket.on('checkStatus', (data) => {
-            console.log(data)
+            // console.log(data)
             setDeck(data.game.deck);
             setPlayers(data.game.players);
             setCurrentPlayerTurn(data.game.players[data.game.currentPlayerIndex].id);
@@ -75,10 +80,20 @@ const GameField: React.FC = () => {
 
         socket.on('chooseAction',(message) => {
             setActionTrigger(message.data.options)
-            console.log(message)
+            // console.log(message)
+        })
+
+        socket.on('chosenAction', (data) => {
+            setCards({
+                action: data.data.action,
+                playerCard: data.data.playerCard,
+                propCardsCanDestroy: [...data.data.propCardsCanDestroy]
+            })
+            console.log(data)
         })
 
         return () => {
+            socket.off('chosenAction');
             socket.off('checkStatus');
             socket.off('gameStateUpdate');
             socket.off('gameError');
@@ -128,7 +143,7 @@ const GameField: React.FC = () => {
         },
     }));
 
-
+    console.log(cards)
     return (
         <Container>
             {
@@ -145,6 +160,7 @@ const GameField: React.FC = () => {
                 {board && <BoardLayout setterTrigger={setActionTrigger} actionTrigger={actionTrigger} board={board}  currentPlayerId={playerId}/>}
             </Field>
             {hand && <Cards hand={hand} />}
+            {!!cards && <ActionCardsModal />}
         </Container>
     );
 };

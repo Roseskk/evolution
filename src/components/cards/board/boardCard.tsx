@@ -6,7 +6,7 @@ import socket from "../../../api/ws/socket.ts";
 import BoardPropertyCards from "./properties/boardPropertyCards.tsx";
 
 // Стили для карточек
-const CardWrapper = styled.div`
+export const CardWrapper = styled.div`
   width: 100px;
   height: 150px;
   background-color: green;
@@ -112,7 +112,7 @@ const BoardCard = ({card, position, playerId, setterTrigger, actionTrigger}: {ca
             }
             {
                 card.properties.length > 0
-                ? <BoardPropertyCards setterTrigger={setterTrigger} actionTrigger={actionTrigger} position={position} properties={card.properties} />
+                ? <BoardPropertyCards cardId={card.id} setterTrigger={setterTrigger} actionTrigger={actionTrigger} position={position} properties={card.properties} />
                 : null
             }
         </CardWrapper>

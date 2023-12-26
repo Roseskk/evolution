@@ -10,6 +10,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 //Toastify
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
+import {ActionChosenCardsProvider} from "./context/useActionChosenCards.tsx";
 
 
 // const socket = io('172.16.1.66:3000');
@@ -18,16 +19,18 @@ function App() {
 
   return (
       // Test Routing
-      <DndProvider backend={HTML5Backend}>
-          <ToastContainer />
-          <BrowserRouter>
-              <Routes>
-                  <Route path={'/'} element={<MainMenu />} />
-                  <Route path={'/lobby/:id'} element={<Lobby />} />
-                  <Route path={'/lobby/:id/game'} element={<GameField />} />
-              </Routes>
-          </BrowserRouter>
-      </DndProvider>
+      <ActionChosenCardsProvider>
+          <DndProvider backend={HTML5Backend}>
+              <ToastContainer />
+              <BrowserRouter>
+                  <Routes>
+                      <Route path={'/'} element={<MainMenu />} />
+                      <Route path={'/lobby/:id'} element={<Lobby />} />
+                      <Route path={'/lobby/:id/game'} element={<GameField />} />
+                  </Routes>
+              </BrowserRouter>
+          </DndProvider>
+      </ActionChosenCardsProvider>
   )
 }
 
