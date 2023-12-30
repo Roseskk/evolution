@@ -87,7 +87,8 @@ const GameField: React.FC = () => {
             setCards({
                 action: data.data.action,
                 playerCard: data.data.playerCard,
-                propCardsCanDestroy: [...data.data.propCardsCanDestroy]
+                propCardsCanDestroy: [...data.data.propCardsCanDestroy],
+                cardName: data.data.cardName
             })
             console.log(data)
         })
